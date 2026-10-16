@@ -1,0 +1,12 @@
+{
+  "name": "pi-web-edge-model",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Manage Android edge models in PI WEB: llama.cpp Hexagon and LiteRT-LM",
+  "license": "UNLICENSED",
+  "engines": { "node": ">=22" },
+  "files": ["browser", "server", "termux", "device", "server-plugin.js", "README.md", "docs"],
+  "piWeb": { "plugins": [{ "id": "edge-model", "browserRoot": "browser", "module": "browser/pi-web-plugin.js", "serverModule": "server-plugin.js", "machineSpecific": true }] },
+  "scripts": { "check": "node scripts/selfcheck.mjs" }
+}

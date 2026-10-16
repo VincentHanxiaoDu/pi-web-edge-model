@@ -1,0 +1,14 @@
+node_modules/
+*.tgz
+*.gguf
+*.litertlm
+*.so
+*.pem
+*.key
+*.crt
+.env*
+*.log
+models.json
+models.json.*
+auth.json
+state/

@@ -1,0 +1,8 @@
+#!/system/bin/sh
+# Stop one engine's server (frees its model's memory). usage: edge-stop litert|llamacpp
+case "$1" in
+  litert) pkill -f "litert_npu_cli.py serve" ;;
+  llamacpp) pkill -f "llama-server .*--port 9380" ;;
+  *) echo "usage: edge-stop litert|llamacpp"; exit 2 ;;
+esac
+exit 0

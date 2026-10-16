@@ -1,0 +1,9 @@
+#!/system/bin/sh
+# (Re)start the NPU-capable litert-lm OpenAI server as the adb shell user.
+# Model links and config.json are written by the plugin before it calls this.
+pkill -f "litert_npu_cli.py serve" 2>/dev/null
+sleep 1
+cd /data/local/tmp/llm
+setsid nohup /data/local/tmp/py/bin/litert-lm-shell serve --host 127.0.0.1 --port 9379 \
+  > /data/local/tmp/llm/serve.log 2>&1 < /dev/null &
+echo "started litert serve pid $!"

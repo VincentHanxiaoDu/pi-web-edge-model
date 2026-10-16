@@ -1,0 +1,11 @@
+#!/system/bin/sh
+# Run the litert-lm CLI as the adb shell user (the only uid that may open /dev/fastrpc-cdsp).
+export HOME=/data/local/tmp/llm/home
+export TMPDIR=/data/local/tmp/llm/tmp
+export PYTHONHOME=/data/local/tmp/py
+export PYTHONPATH=/data/local/tmp/py/site-packages
+export LD_LIBRARY_PATH=/data/local/tmp/py/lib:/data/local/tmp/llm
+export ADSP_LIBRARY_PATH=/data/local/tmp/llm
+export LITERT_NPU_LIB=/data/local/tmp/llm
+mkdir -p "$HOME" "$TMPDIR"
+exec /data/local/tmp/py/bin/python3 /data/local/tmp/py/bin/litert_npu_cli.py "$@"

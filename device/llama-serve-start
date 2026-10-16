@@ -1,0 +1,19 @@
+#!/system/bin/sh
+# (Re)start llama.cpp's OpenAI server on the Hexagon NPU with one GGUF, as the adb shell user.
+# usage: llama-serve-start <file.gguf> [ctx] [idle-seconds]
+# The Android build has no router (no subprocess support), so the plugin's gateway picks the model.
+B=$(ls -d /data/local/tmp/llama/llama-b* 2>/dev/null | sort | tail -1)
+G=/data/local/tmp/llama/gguf
+M=$1
+CTX=${2:-8192}
+IDLE=${3:-600}
+[ -n "$B" ] || { echo "llama.cpp build missing under /data/local/tmp/llama"; exit 2; }
+[ -f "$G/$M" ] || { echo "model missing: $G/$M"; exit 2; }
+export LD_LIBRARY_PATH=$B/lib ADSP_LIBRARY_PATH=$B/lib
+pkill -f "llama-server .*--port 9380" 2>/dev/null
+sleep 1
+cd $G
+setsid nohup $B/bin/llama-server -m "$G/$M" --alias "${M%.gguf}" --host 127.0.0.1 --port 9380 \
+  --device HTP0 -ngl 99 -t 6 -fa on -c "$CTX" --jinja --no-webui --sleep-idle-seconds "$IDLE" \
+  > /data/local/tmp/llama/server.log 2>&1 < /dev/null &
+echo "started llama-server pid $! model $M ctx $CTX"
